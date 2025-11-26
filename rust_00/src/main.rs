@@ -3,7 +3,7 @@ use clap::{Arg, Command, ArgAction};
 fn main() {
     let matches = Command::new("hello_app")
         .version("1.0")
-        .author("Ton Nom")
+        .author("Olivier")
         .about("Dit bonjour avec des options")
         .arg(
             Arg::new("name")
@@ -15,13 +15,13 @@ fn main() {
             Arg::new("upper")
                 .long("upper")
                 .help("Met le message en majuscules")
-                .action(ArgAction::SetTrue), // <-- ici, pour un flag booléen
+                .action(ArgAction::SetTrue),
         )
         .arg(
             Arg::new("repeat")
                 .long("repeat")
                 .help("Nombre de répétitions")
-                .value_parser(clap::value_parser!(usize)), // prend une valeur
+                .value_parser(clap::value_parser!(usize)),
         )
         .get_matches();
 
