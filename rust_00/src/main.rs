@@ -26,7 +26,7 @@ fn main() {
         .get_matches();
 
     let name = matches.get_one::<String>("name").map(|s| s.as_str());
-    let upper = matches.get_flag("upper"); // <-- récupère le booléen
+    let upper = matches.get_flag("upper");
     let repeat = *matches.get_one::<usize>("repeat").unwrap_or(&1);
 
     for _ in 0..repeat {
