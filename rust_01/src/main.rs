@@ -1,10 +1,14 @@
 use std::collections::HashMap;
 use std::io;
 use clap::{Arg, Command, ArgAction};
-fn compte_top(phrase:String,top:usize,min:usize){
-    let phrase = phrase.to_lowercase();
+fn compte_top(phrase:String,top:usize,min:usize,ignore:bool){
+    let phrase_processed = if ignore{
+        phrase.to_lowercase()
+    }else{
+        phrase
+    };
     let mut compteur = HashMap::new();
-    for mot in phrase.split_whitespace() {
+    for mot in phrase_processed.split_whitespace() {
         if mot.len()>=min{
             *compteur.entry(mot.to_string()).or_insert(0) += 1;
         }
@@ -45,16 +49,23 @@ fn main() {
         .arg(
             Arg::new("min-length")
             .long("min")
-            .help("taille minimum pour être compté")
+            .help("Taille minimum pour être compté")
             .default_value("1")
             .value_parser(clap::value_parser!(usize)),
+        )
+        .arg(
+            Arg::new("ignore-case")
+            .long("ignore-case")
+            .help("Si vrai, les majuscules sont ignorées")
+            .action(clap::ArgAction::SetTrue),
         )
         .get_matches();
         let min=*matches.get_one::<usize>("min-length").unwrap();
         let top=*matches.get_one::<usize>("top").unwrap();
+        let ignore=matches.get_flag("ignore-case");
         let phrase=matches
             .get_one::<String>("phrase")
             .unwrap()
             .clone();
-        compte_top(phrase,top,min);
+        compte_top(phrase,top,min,ignore);
 }
