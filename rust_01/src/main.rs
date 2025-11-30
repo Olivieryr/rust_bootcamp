@@ -23,6 +23,12 @@ fn main() {
             .required(true)
             .index(1),
         )
+        .arg(
+            Arg::new("top")
+            .long("top")
+            .help("Affiche les n mots les plus présents")
+            .value_parser(clap::value_parser!(usize)),
+        )
         .get_matches();
         let phrase=matches
             .get_one::<String>("phrase")
