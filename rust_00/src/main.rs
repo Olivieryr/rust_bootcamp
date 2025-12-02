@@ -1,4 +1,4 @@
-use clap::{Arg, Command, ArgAction};
+use clap::{Arg, ArgAction, Command};
 
 fn main() {
     let matches = Command::new("hello_app")
@@ -36,8 +36,8 @@ fn main() {
 
 fn hello(name: Option<&str>, upper: bool) {
     let mut message = match name {
-        Some(name) => format!("Bonjour, {} !", name),
-        None => "Bonjour le monde !".to_string(),
+        Some(name) => format!("Hello, {}!", name),
+        None => "Hello, World!".to_string(),
     };
     if upper {
         message = message.to_uppercase();
