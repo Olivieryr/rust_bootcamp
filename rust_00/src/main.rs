@@ -1,36 +1,25 @@
-use clap::{Arg, ArgAction, Command};
+use clap::Parser;
+
+#[derive(Parser, Debug)]
+#[command(version = "1.0", author = "Olivier", about = "Dit bonjour avec des options")]
+struct Args {
+
+    #[arg(required = false, index = 1)]
+    name: Option<String>,
+
+    #[arg(long, short)]
+    upper: bool,
+
+    #[arg(long, short, default_value_t = 1)]
+    repeat: usize,
+}
 
 fn main() {
-    let matches = Command::new("hello_app")
-        .version("1.0")
-        .author("Olivier")
-        .about("Dit bonjour avec des options")
-        .arg(
-            Arg::new("name")
-                .help("Nom de la personne à saluer")
-                .required(false)
-                .index(1),
-        )
-        .arg(
-            Arg::new("upper")
-                .long("upper")
-                .help("Met le message en majuscules")
-                .action(ArgAction::SetTrue),
-        )
-        .arg(
-            Arg::new("repeat")
-                .long("repeat")
-                .help("Nombre de répétitions")
-                .value_parser(clap::value_parser!(usize)),
-        )
-        .get_matches();
-
-    let name = matches.get_one::<String>("name").map(|s| s.as_str());
-    let upper = matches.get_flag("upper");
-    let repeat = *matches.get_one::<usize>("repeat").unwrap_or(&1);
-
-    for _ in 0..repeat {
-        hello(name, upper);
+    let args = Args::parse();
+    
+    // Le reste du code est correct
+    for _ in 0..args.repeat {
+        hello(args.name.as_deref(), args.upper);
     }
 }
 

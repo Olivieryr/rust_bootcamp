@@ -1,65 +1,52 @@
-use clap::{Arg,Command};
+use clap::Parser;
 use std::collections::HashMap;
+
+#[derive(Parser, Debug)]
+#[command(version = "1.0", author = "Olivier", about = "Compte le nombre d'itérations d'un mot dans une phrase")]
+struct Args {
+    phrase: String,
+
+    #[arg(long, default_value_t = 0)]
+    top: usize,
+
+    #[arg(long = "min", default_value_t = 1)]
+    min_length: usize,
+
+    #[arg(long)]
+    ignore_case: bool,
+}
+
+fn main() {
+    let args = Args::parse();
+    compte_top(args.phrase, args.top, args.min_length, args.ignore_case);
+}
+
 fn compte_top(phrase: String, top: usize, min: usize, ignore: bool) {
     let phrase_processed = if ignore {
         phrase.to_lowercase()
     } else {
         phrase
     };
+
     let mut compteur = HashMap::new();
+
     for mot in phrase_processed.split_whitespace() {
         if mot.len() >= min {
             *compteur.entry(mot.to_string()).or_insert(0) += 1;
         }
     }
+
     let mut classement: Vec<(String, u32)> = compteur.into_iter().collect();
     classement.sort_by(|a, b| b.1.cmp(&a.1));
     println!("Occurrences des mots :");
+    let iter = classement.iter();
     if top != 0 {
-        for (mot, nb) in classement.iter().take(top) {
+        for (mot, nb) in iter.take(top) {
             println!("{}: {}", mot, nb);
         }
     } else {
-        for (mot, nb) in classement.iter() {
+        for (mot, nb) in iter {
             println!("{}: {}", mot, nb);
         }
     }
-}
-fn main() {
-    let matches = Command::new("compteur_app")
-        .version("1.0")
-        .author("Olivier")
-        .about("Compte le nombre d'itérations des mots d'une phrase")
-        .arg(
-            Arg::new("phrase")
-                .help("Phrase à étudier")
-                .required(true)
-                .index(1),
-        )
-        .arg(
-            Arg::new("top")
-                .long("top")
-                .help("Affiche les n mots les plus présents")
-                .default_value("0")
-                .value_parser(clap::value_parser!(usize)),
-        )
-        .arg(
-            Arg::new("min-length")
-                .long("min")
-                .help("Taille minimum pour être compté")
-                .default_value("1")
-                .value_parser(clap::value_parser!(usize)),
-        )
-        .arg(
-            Arg::new("ignore-case")
-                .long("ignore-case")
-                .help("Si vrai, les majuscules sont ignorées")
-                .action(clap::ArgAction::SetTrue),
-        )
-        .get_matches();
-    let min = *matches.get_one::<usize>("min-length").unwrap();
-    let top = *matches.get_one::<usize>("top").unwrap();
-    let ignore = matches.get_flag("ignore-case");
-    let phrase = matches.get_one::<String>("phrase").unwrap().clone();
-    compte_top(phrase, top, min, ignore);
 }
