@@ -1,5 +1,6 @@
 use clap::Parser;
 use std::collections::HashMap;
+use std::io::{self, Read};
 
 #[derive(Parser, Debug)]
 #[command(
@@ -8,9 +9,10 @@ use std::collections::HashMap;
     about = "Compte le nombre d'itérations d'un mot dans une phrase"
 )]
 struct Args {
+    #[arg(index=1,default_value="")]
     phrase: String,
 
-    #[arg(long,short,default_value_t = 0)]
+    #[arg(long,short='n',default_value_t = 0)]
     top: usize,
 
     #[arg(long = "min",short,default_value_t = 1)]
@@ -21,7 +23,12 @@ struct Args {
 }
 
 fn main() {
-    let args = Args::parse();
+    let mut args = Args::parse();
+    if args.phrase.is_empty(){
+        let mut buffer = String::new();
+        io::stdin().read_to_string(&mut buffer).unwrap();
+        args.phrase = buffer.trim().to_string();
+    }
     compte_top(args.phrase, args.top, args.min_length, args.ignore_case);
 }
 
