@@ -2,14 +2,18 @@ use clap::Parser;
 use std::collections::HashMap;
 
 #[derive(Parser, Debug)]
-#[command(version = "1.0", author = "Olivier", about = "Compte le nombre d'itérations d'un mot dans une phrase")]
+#[command(
+    version = "1.0",
+    author = "Olivier",
+    about = "Compte le nombre d'itérations d'un mot dans une phrase"
+)]
 struct Args {
     phrase: String,
 
     #[arg(long, default_value_t = 0)]
     top: usize,
 
-    #[arg(long = "min", default_value_t = 1)]
+    #[arg(long = "min",short,default_value_t = 1)]
     min_length: usize,
 
     #[arg(long)]
