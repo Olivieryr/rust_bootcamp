@@ -10,13 +10,13 @@ use std::collections::HashMap;
 struct Args {
     phrase: String,
 
-    #[arg(long, default_value_t = 0)]
+    #[arg(long,short,default_value_t = 0)]
     top: usize,
 
     #[arg(long = "min",short,default_value_t = 1)]
     min_length: usize,
 
-    #[arg(long)]
+    #[arg(long,short)]
     ignore_case: bool,
 }
 
