@@ -9,22 +9,22 @@ use std::io::{self, Read};
     about = "Compte le nombre d'itérations d'un mot dans une phrase"
 )]
 struct Args {
-    #[arg(index=1,default_value="")]
+    #[arg(index = 1, default_value = "")]
     phrase: String,
 
-    #[arg(long,short='n',default_value_t = 0)]
+    #[arg(long, short = 'n', default_value_t = 0)]
     top: usize,
 
-    #[arg(long = "min",short,default_value_t = 1)]
+    #[arg(long = "min-length", short, default_value_t = 1)]
     min_length: usize,
 
-    #[arg(long,short)]
+    #[arg(long, short)]
     ignore_case: bool,
 }
 
 fn main() {
     let mut args = Args::parse();
-    if args.phrase.is_empty(){
+    if args.phrase.is_empty() {
         let mut buffer = String::new();
         io::stdin().read_to_string(&mut buffer).unwrap();
         args.phrase = buffer.trim().to_string();
