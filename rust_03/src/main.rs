@@ -4,8 +4,6 @@ use std::net::{TcpListener, TcpStream};
 use std::sync::{Arc, Mutex};
 use std::thread;
 
-// --- CONSTANTES DU CHALLENGE ---
-
 // P: Nombre premier 64-bit (Hardcoded selon le screenshot)
 // Hex: D87F A3E2 91B4 C7F3
 const P: u64 = 0xD87FA3E291B4C7F3;
@@ -104,37 +102,30 @@ fn main() -> std::io::Result<()> {
 }
 
 fn handle_connection(mut stream: TcpStream) -> std::io::Result<()> {
-    // 1. DIFFIE-HELLMAN KEY EXCHANGE
     println!("\n[DH] Starting key exchange...");
     println!("[DH] Using hardcoded DH parameters:");
     println!("p = {:X} (64-bit prime - public)", P);
     println!("g = {} (generator - public)", G);
 
-    // Génération Clé Privée (Random 64-bit)
     let private_key: u64 = rand::random();
     println!("\n[DH] Generating our keypair...");
     println!("private_key = {} (random u64)", private_key);
 
-    // Calcul Clé Publique: g^private_key % p
     let public_key = mod_pow(G, private_key, P);
     println!("public_key = g^private_key mod p");
     println!("           = {:X}", public_key);
 
-    // Échange des clés publiques
     println!("\n[DH] Exchanging keys...");
     
-    // Envoyer notre clé publique (Big Endian network order)
     println!("[NETWORK] Sending public key (8 bytes)...");
     stream.write_all(&public_key.to_be_bytes())?;
 
-    // Recevoir leur clé publique
     let mut buffer = [0u8; 8];
     stream.read_exact(&mut buffer)?;
     let their_public_key = u64::from_be_bytes(buffer);
     println!("[NETWORK] Received public key (8 bytes) ✓");
     println!(" - Receive their public: {:X}", their_public_key);
 
-    // Calcul du Secret Partagé: (their_public)^private_key % p
     println!("\n[DH] Computing shared secret...");
     println!("Formula: secret = (their_public)^(our_private) mod p");
     
@@ -142,18 +133,12 @@ fn handle_connection(mut stream: TcpStream) -> std::io::Result<()> {
     println!("\nSecret = {:X}", shared_secret);
     println!("[VERIFY] Both sides computed the same secret ✓");
 
-    // 2. INITIALISATION DU STREAM CIPHER
     println!("\n[STREAM] Generating keystream from secret...");
     println!("Algorithm: LCG (a=1103515245, c=12345, m=2^32)");
     println!("Seed: secret = {:X}", shared_secret);
 
-    // Le Cipher est partagé entre le thread de lecture et d'écriture.
-    // L'ordre des opérations (send/receive) affecte l'état du LCG, c'est pourquoi
-    // un chat asynchrone pur peut désynchroniser le flux si ce n'est pas géré strictement.
-    // Pour cet exercice, on utilise un Mutex pour protéger l'état.
     let cipher = Arc::new(Mutex::new(Lcg::new(shared_secret)));
 
-    // Afficher un aperçu du keystream (comme dans le screenshot)
     {
         let mut temp_cipher = Lcg::new(shared_secret);
         print!("Keystream: ");
@@ -165,11 +150,9 @@ fn handle_connection(mut stream: TcpStream) -> std::io::Result<()> {
 
     println!("\n✓ Secure channel established!\n");
 
-    // 3. BOUCLE DE CHAT (Multi-threadé)
     let stream_read = stream.try_clone()?;
     let cipher_read = Arc::clone(&cipher);
 
-    // Thread pour écouter le réseau (Déchiffrement)
     thread::spawn(move || {
         let mut buffer = [0u8; 1024];
         let mut socket = stream_read;
@@ -188,15 +171,13 @@ fn handle_connection(mut stream: TcpStream) -> std::io::Result<()> {
                     
                     let mut cipher_lock = cipher_read.lock().unwrap();
                     
-                    // Déchiffrement byte par byte
                     for &byte in encrypted_msg {
                         let k = cipher_lock.next_byte();
                         keystream_bytes.push(k);
                         decrypted_msg.push(byte ^ k);
                     }
-                    drop(cipher_lock); // Libérer le mutex vite
+                    drop(cipher_lock);
 
-                    // Affichage des logs détaillés [DECRYPT]
                     println!("\n[DECRYPT]");
                     print!("Cipher: ");
                     for b in encrypted_msg { print!("{:02x} ", b); }
@@ -206,7 +187,6 @@ fn handle_connection(mut stream: TcpStream) -> std::io::Result<()> {
                     for b in &decrypted_msg { print!("{:02x} ", b); }
                     println!();
 
-                    // Tentative d'affichage en String
                     if let Ok(msg_str) = String::from_utf8(decrypted_msg) {
                         println!("\n[PEER] > {}", msg_str.trim());
                     }
@@ -218,7 +198,6 @@ fn handle_connection(mut stream: TcpStream) -> std::io::Result<()> {
         }
     });
 
-    // Boucle principale pour envoyer (Chiffrement)
     let mut input = String::new();
     loop {
         input.clear();
@@ -232,7 +211,6 @@ fn handle_connection(mut stream: TcpStream) -> std::io::Result<()> {
 
         let mut cipher_lock = cipher.lock().unwrap();
 
-        // Chiffrement byte par byte
         for &byte in plain_bytes {
             let k = cipher_lock.next_byte();
             keystream_bytes.push(k);
@@ -240,7 +218,6 @@ fn handle_connection(mut stream: TcpStream) -> std::io::Result<()> {
         }
         drop(cipher_lock);
 
-        // Affichage des logs détaillés [ENCRYPT]
         println!("\n[ENCRYPT]");
         print!("Plain:  ");
         for b in plain_bytes { print!("{:02x} ", b); }
