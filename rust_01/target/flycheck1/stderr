@@ -1,91 +1,12 @@
-    Blocking waiting for file lock on package cache
-    Blocking waiting for file lock on package cache
-    Blocking waiting for file lock on package cache
-   0.186981700s  INFO prepare_target{force=false package_id=rust_01 v0.1.0 (C:\Users\olivi\rust_bootcamp\rust_01) target="rust_01"}: cargo::core::compiler::fingerprint: fingerprint error for rust_01 v0.1.0 (C:\Users\olivi\rust_bootcamp\rust_01)/Check { test: false }/TargetInner { name: "rust_01", doc: true, ..: with_path("C:\\Users\\olivi\\rust_bootcamp\\rust_01\\src\\main.rs", Edition2024) }
-   0.187048200s  INFO prepare_target{force=false package_id=rust_01 v0.1.0 (C:\Users\olivi\rust_bootcamp\rust_01) target="rust_01"}: cargo::core::compiler::fingerprint:     err: failed to read `C:\Users\olivi\rust_bootcamp\rust_01\target\debug\.fingerprint\rust_01-004dcf03d97681e5\bin-rust_01`
-
-Caused by:
-    Le fichier spécifié est introuvable. (os error 2)
-
-Stack backtrace:
-   0: git_midx_writer_dump
-   1: git_midx_writer_dump
-   2: git_midx_writer_dump
-   3: git_midx_writer_dump
-   4: git_filter_source_repo
-   5: git_filter_source_path
-   6: git_filter_source_path
-   7: git_filter_source_path
-   8: git_filter_source_path
-   9: git_filter_source_repo
-  10: git_filter_source_repo
-  11: git_filter_source_repo
-  12: git_filter_source_repo
-  13: git_filter_source_repo
-  14: <unknown>
-  15: <unknown>
-  16: git_midx_writer_dump
-  17: git_filter_source_repo
-  18: git_midx_writer_dump
-  19: BaseThreadInitThunk
-  20: RtlUserThreadStart
-   0.212903900s  INFO prepare_target{force=false package_id=clap v4.5.53 target="clap"}: cargo::core::compiler::fingerprint: fingerprint error for clap v4.5.53/Check { test: false }/TargetInner { benched: false, ..: lib_target("clap", ["lib"], "C:\\Users\\olivi\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\clap-4.5.53\\src\\lib.rs", Edition2021) }
-   0.213433700s  INFO prepare_target{force=false package_id=clap v4.5.53 target="clap"}: cargo::core::compiler::fingerprint:     err: failed to read `C:\Users\olivi\rust_bootcamp\rust_01\target\debug\.fingerprint\clap-0374907e4bbdadf8\lib-clap`
-
-Caused by:
-    Le fichier spécifié est introuvable. (os error 2)
-
-Stack backtrace:
-   0: git_midx_writer_dump
-   1: git_midx_writer_dump
-   2: git_midx_writer_dump
-   3: git_midx_writer_dump
-   4: git_filter_source_repo
-   5: git_filter_source_path
-   6: git_filter_source_path
-   7: git_filter_source_path
-   8: git_filter_source_path
-   9: git_filter_source_path
-  10: git_filter_source_repo
-  11: git_filter_source_repo
-  12: git_filter_source_repo
-  13: git_filter_source_repo
-  14: git_filter_source_repo
-  15: <unknown>
-  16: <unknown>
-  17: git_midx_writer_dump
-  18: git_filter_source_repo
-  19: git_midx_writer_dump
-  20: BaseThreadInitThunk
-  21: RtlUserThreadStart
-   0.597461900s  INFO prepare_target{force=false package_id=rust_01 v0.1.0 (C:\Users\olivi\rust_bootcamp\rust_01) target="rust_01"}: cargo::core::compiler::fingerprint: fingerprint error for rust_01 v0.1.0 (C:\Users\olivi\rust_bootcamp\rust_01)/Check { test: true }/TargetInner { name: "rust_01", doc: true, ..: with_path("C:\\Users\\olivi\\rust_bootcamp\\rust_01\\src\\main.rs", Edition2024) }
-   0.597502800s  INFO prepare_target{force=false package_id=rust_01 v0.1.0 (C:\Users\olivi\rust_bootcamp\rust_01) target="rust_01"}: cargo::core::compiler::fingerprint:     err: failed to read `C:\Users\olivi\rust_bootcamp\rust_01\target\debug\.fingerprint\rust_01-877dbb71b1c8e6fa\test-bin-rust_01`
-
-Caused by:
-    Le fichier spécifié est introuvable. (os error 2)
-
-Stack backtrace:
-   0: git_midx_writer_dump
-   1: git_midx_writer_dump
-   2: git_midx_writer_dump
-   3: git_midx_writer_dump
-   4: git_filter_source_repo
-   5: git_filter_source_path
-   6: git_filter_source_path
-   7: git_filter_source_path
-   8: git_filter_source_path
-   9: git_filter_source_repo
-  10: git_filter_source_repo
-  11: git_filter_source_repo
-  12: git_filter_source_repo
-  13: git_filter_source_repo
-  14: <unknown>
-  15: <unknown>
-  16: git_midx_writer_dump
-  17: git_filter_source_repo
-  18: git_midx_writer_dump
-  19: BaseThreadInitThunk
-  20: RtlUserThreadStart
-    Checking clap v4.5.53
+   0.102185500s  INFO prepare_target{force=false package_id=rust_01 v0.1.0 (C:\Users\olivi\rust_bootcamp\rust_01) target="rust_01"}: cargo::core::compiler::fingerprint: stale: changed "C:\\Users\\olivi\\rust_bootcamp\\rust_01\\src\\main.rs"
+   0.102244800s  INFO prepare_target{force=false package_id=rust_01 v0.1.0 (C:\Users\olivi\rust_bootcamp\rust_01) target="rust_01"}: cargo::core::compiler::fingerprint:           (vs) "C:\\Users\\olivi\\rust_bootcamp\\rust_01\\target\\debug\\.fingerprint\\rust_01-004dcf03d97681e5\\dep-bin-rust_01"
+   0.102257400s  INFO prepare_target{force=false package_id=rust_01 v0.1.0 (C:\Users\olivi\rust_bootcamp\rust_01) target="rust_01"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 13409762900, nanos: 90981800 } < FileTime { seconds: 13409999136, nanos: 858596700 }
+   0.102754900s  INFO prepare_target{force=false package_id=rust_01 v0.1.0 (C:\Users\olivi\rust_bootcamp\rust_01) target="rust_01"}: cargo::core::compiler::fingerprint: fingerprint dirty for rust_01 v0.1.0 (C:\Users\olivi\rust_bootcamp\rust_01)/Check { test: false }/TargetInner { name: "rust_01", doc: true, ..: with_path("C:\\Users\\olivi\\rust_bootcamp\\rust_01\\src\\main.rs", Edition2024) }
+   0.102796400s  INFO prepare_target{force=false package_id=rust_01 v0.1.0 (C:\Users\olivi\rust_bootcamp\rust_01) target="rust_01"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "C:\\Users\\olivi\\rust_bootcamp\\rust_01\\target\\debug\\.fingerprint\\rust_01-004dcf03d97681e5\\dep-bin-rust_01", reference_mtime: FileTime { seconds: 13409762900, nanos: 90981800 }, stale: "C:\\Users\\olivi\\rust_bootcamp\\rust_01\\src\\main.rs", stale_mtime: FileTime { seconds: 13409999136, nanos: 858596700 } }))
+   0.115937600s  INFO prepare_target{force=false package_id=rust_01 v0.1.0 (C:\Users\olivi\rust_bootcamp\rust_01) target="rust_01"}: cargo::core::compiler::fingerprint: stale: changed "C:\\Users\\olivi\\rust_bootcamp\\rust_01\\src\\main.rs"
+   0.115980300s  INFO prepare_target{force=false package_id=rust_01 v0.1.0 (C:\Users\olivi\rust_bootcamp\rust_01) target="rust_01"}: cargo::core::compiler::fingerprint:           (vs) "C:\\Users\\olivi\\rust_bootcamp\\rust_01\\target\\debug\\.fingerprint\\rust_01-877dbb71b1c8e6fa\\dep-test-bin-rust_01"
+   0.116004400s  INFO prepare_target{force=false package_id=rust_01 v0.1.0 (C:\Users\olivi\rust_bootcamp\rust_01) target="rust_01"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 13409762900, nanos: 90981800 } < FileTime { seconds: 13409999136, nanos: 858596700 }
+   0.116402400s  INFO prepare_target{force=false package_id=rust_01 v0.1.0 (C:\Users\olivi\rust_bootcamp\rust_01) target="rust_01"}: cargo::core::compiler::fingerprint: fingerprint dirty for rust_01 v0.1.0 (C:\Users\olivi\rust_bootcamp\rust_01)/Check { test: true }/TargetInner { name: "rust_01", doc: true, ..: with_path("C:\\Users\\olivi\\rust_bootcamp\\rust_01\\src\\main.rs", Edition2024) }
+   0.116439100s  INFO prepare_target{force=false package_id=rust_01 v0.1.0 (C:\Users\olivi\rust_bootcamp\rust_01) target="rust_01"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "C:\\Users\\olivi\\rust_bootcamp\\rust_01\\target\\debug\\.fingerprint\\rust_01-877dbb71b1c8e6fa\\dep-test-bin-rust_01", reference_mtime: FileTime { seconds: 13409762900, nanos: 90981800 }, stale: "C:\\Users\\olivi\\rust_bootcamp\\rust_01\\src\\main.rs", stale_mtime: FileTime { seconds: 13409999136, nanos: 858596700 } }))
     Checking rust_01 v0.1.0 (C:\Users\olivi\rust_bootcamp\rust_01)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.00s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.47s

@@ -41,7 +41,7 @@ fn compte_top(phrase: String, top: usize, min: usize, ignore: bool) {
 
     let mut compteur = HashMap::new();
 
-    for mot in phrase_processed.split_whitespace() {
+    for mot in phrase_processed.split(|c| c == ' ' || c == '.' || c == ',') {
         if mot.len() >= min {
             *compteur.entry(mot.to_string()).or_insert(0) += 1;
         }

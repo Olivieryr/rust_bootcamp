@@ -11,19 +11,11 @@ use std::io::{self, Read, Seek, SeekFrom, Write};
     help_template = "\
     {before-help}{name} (v{version})
     Author: {author}
-
-    About:
-    {about}
-
-    Usage:
-    {usage}
-
-    Args:
-    {all-args}
-
+    About: {about}
+    Usage: {usage}
+    Args: {all-args}
     {after-help}"
 )]
-
 struct Args {
     #[arg(short, long)]
     file: String,
@@ -42,8 +34,8 @@ struct Args {
 }
 
 fn parse_offset(src: &str) -> Result<u64, String> {
-    if src.starts_with("0x") {
-        u64::from_str_radix(&src[2..], 16)
+    if let Some(stripped) = src.strip_prefix("0x") {
+        u64::from_str_radix(stripped, 16)
             .map_err(|_| format!("Offset hexadécimal invalide: {}", src))
     } else {
         src.parse::<u64>()
@@ -119,7 +111,7 @@ fn print_hex_dump(data: &[u8], start_offset: u64) {
         let ascii_part: String = chunk
             .iter()
             .map(|&byte| {
-                if byte >= 0x20 && byte <= 0x7E {
+                if (0x20..=0x7E).contains(&byte) {
                     byte as char
                 } else {
                     '.'
@@ -142,8 +134,9 @@ fn write_file(filepath: &str, offset: u64, hex_string: &str) -> io::Result<()> {
         .read(true)
         .write(true)
         .create(true)
+        .truncate(true)
         .open(filepath)
-        .map_err(|e| io::Error::new(io::ErrorKind::Other, format!("Erreur d'ouverture: {}", e)))?;
+        .map_err(|e| io::Error::other(format!("Erreur d'ouverture: {}", e)))?;
 
     file.seek(SeekFrom::Start(offset))?;
     file.write_all(&bytes_to_write)?;
@@ -154,7 +147,7 @@ fn write_file(filepath: &str, offset: u64, hex_string: &str) -> io::Result<()> {
     let ascii_preview: String = bytes_to_write
         .iter()
         .map(|&byte| {
-            if byte >= 0x20 && byte <= 0x7E {
+            if (0x20..=0x7E).contains(&byte) {
                 byte as char
             } else {
                 '.'
@@ -170,7 +163,7 @@ fn write_file(filepath: &str, offset: u64, hex_string: &str) -> io::Result<()> {
 
 fn hex_to_bytes(hex: &str) -> Result<Vec<u8>, String> {
     let cleaned_hex = hex.replace(" ", "");
-    if cleaned_hex.len() % 2 != 0 {
+    if !cleaned_hex.len().is_multiple_of(2) {
         return Err("Chaîne hexadécimale invalide (longueur impaire)".to_string());
     }
 
