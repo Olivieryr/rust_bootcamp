@@ -1,6 +1,5 @@
 use clap::Parser;
 use colored::*;
-use crossterm::{cursor, execute, terminal};
 use rand::Rng;
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap};
@@ -66,14 +65,14 @@ impl Grid {
         let mut rng = rand::thread_rng();
         let mut cells = vec![vec![0; width]; height];
 
-        for y in 0..height {
-            for x in 0..width {
+        for (y, row) in cells.iter_mut().enumerate() {
+            for (x, cell) in row.iter_mut().enumerate() {
                 if x == 0 && y == 0 {
-                    cells[y][x] = 0x00;
+                    *cell = 0x00;
                 } else if x == width - 1 && y == height - 1 {
-                    cells[y][x] = 0xFF;
+                    *cell = 0xFF;
                 } else {
-                    cells[y][x] = rng.gen();
+                    *cell = rng.gen();
                 }
             }
         }
